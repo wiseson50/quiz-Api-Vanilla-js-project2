@@ -1,0 +1,33 @@
+
+.body-container{
+  background-color:gray; 
+}
+.myColor{
+    background-color: red;
+}
+.button{
+    
+    background-color: red;
+}
+header{
+    display: flex;
+    justify-content: center;
+    justify-items: stretch;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: wheat;
+    border-width: 35px;
+
+    
+}
+.checkbox-css{
+    margin-left: 20px;
+}
+.bodyContainer{
+    
+    background-color:grey;
+    
+    
+    
+}
+
