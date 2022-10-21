@@ -4,7 +4,7 @@
 function initPopovers() {
   console.log("init popovers");
   const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-  console.log('popoverTriggerList :>> ', popoverTriggerList);
+  // console.log('popoverTriggerList :>> ', popoverTriggerList);
   
       const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 }
@@ -44,8 +44,6 @@ fetchData();
 function createCards(myData) {
 let myContainer = document.getElementById('row');
 myContainer.innerText = ""
-
-
 
 
 myData.forEach(data => {
@@ -97,9 +95,8 @@ let difficult = document.createElement("p");
   myCard.appendChild(popoverButton)
  
 });
-//here I call my popoverButton **(inside myCard function but not in * inside the loop)
+//here I call my popoverButton **(inside myCard function but not * inside the loop)
 initPopovers()
-  // console.log (myData)
   
 }
 
@@ -117,12 +114,12 @@ const myCategory = myData.map((eachCategory) =>{
 
   uniqueNum.forEach((eachCategory) =>{
     let options =document.createElement('option');
-    options.innerText = eachCategory;
     options.value= eachCategory;
+    options.innerText = eachCategory;
     // console.log(uniqueNum)
 dropDown.appendChild(options)
     
-  })
+  });
 
   
  }
@@ -132,23 +129,41 @@ dropDown.appendChild(options)
  
  function myEventlister(myData) {
    const myDropdown = document.querySelector('#kategory')
+   const pSubmit = document.getElementById('mysubmit') ;
+const submitBtn = document.getElementById('submit');
+
+
+submitBtn.addEventListener('click',()=>{
+  
+  document.getElementById('mysubmit').innerText ='thanks for your comment, we will work on this.' 
+
+pSubmit.setAttribute('style', 'text-align:center')
+
+})
+
    myDropdown.addEventListener('change', (event)=>{
-    filterByDropDown(myData)
 
-      // createCards(myData)
-
+      combineFilter(myData)
     });
+
+  
 
     //adding EventListener for checkboxes
 
-    const checkBoxes = document.querySelectorAll('input[type ="checkbox"]')
+   const checkBoxes = document.querySelectorAll('input[type ="checkbox"]');
   checkBoxes.forEach((checkBox)=> {
     checkBox.addEventListener('click', () =>{
-  // combineFilter(myData)
-   filterByCheckbox(myData)
+  combineFilter(myData);
+
+  //  filterByCheckbox(myData)
   
-    })
+    });
+   
   
+  })
+
+  document.getElementById('searchInput').addEventListener('keyup',()=>{
+combineFilter(myData)
   })
   };
     
@@ -160,10 +175,11 @@ dropDown.appendChild(options)
     
      const filterEachCategory = myData.filter((mycategory) =>{ 
       return mycategory.category === dropDownValue || dropDownValue === 'all'
-     }) 
+     })
     
-     //console.log(filterEachCategory);
     createCards(filterEachCategory)
+
+
      } 
     
 //create filter for my Checkboxes
@@ -178,39 +194,38 @@ function filterByCheckbox(myData) {
   checkedCheckBoxes.push(checkbox.value)
 }
 })
-console.log('checkedCheckBoxes :>> ', checkedCheckBoxes);
-let myCheckedFilter = myData.filter((mylevel)=>{
-  // console.log('mylevel.difficulty :>> ', mylevel.difficulty);
 
+let myCheckedFilter = myData.filter((mylevel)=>{
 
   return checkedCheckBoxes.includes(mylevel.difficulty) || checkedCheckBoxes.length === 0
 })
-console.log('myCheckedFilter :>> ', myCheckedFilter);
 createCards(myCheckedFilter)
 }
 
 
 // // //combined my filters
-//  function combineFilter(myData) {
-//   const dropDownValue = document.querySelector('#kategory').value;
+ function combineFilter(myData) {
+  const dropDownValue = document.querySelector('#kategory').value;
   
-//   const checkBoxes = document.querySelectorAll('input[type ="checkbox"]')
-//   // console.log('checkBoxes :>> ', checkBoxes);
- 
-// console.log('myAnswer :>> ', myAnswer);
+  const checkBoxes = document.querySelectorAll('input[type ="checkbox"]:checked')
+  // console.log('checkBoxes :>> ', checkBoxes);
+const inputValue = document.getElementById('searchInput').value
+console.log('inputValue :>> ', inputValue);
 
-//   let checkedCheckBoxes = [];
-  
-//  checkBoxes.forEach((checkbox) =>{
-//  if(checkbox.checked === true){
-//   checkedCheckBoxes.push(checkbox.value)
-// }
-// });
-// const checkBoxesArray = Array.from(checkBoxes);
-// const valuesArray=Array.from(checkBoxes).map((checkbox)=>{
-//   return checkbox.value;
-// });
-// }
+
+const valuesArray=Array.from(checkBoxes).map((checkbox)=>{
+  return checkbox.value;
+ });
+ const filterDifficulty = myData.filter((mycategory) =>{
+
+ return (mycategory.category ===dropDownValue ||dropDownValue ==='all') &&
+   (valuesArray.includes(mycategory.difficulty)||valuesArray.length === 0) && 
+   (mycategory.category.toLowerCase().includes(inputValue.toLowerCase()))
+ })
+ console.log('filterDifficulty :>> ', filterDifficulty);
+ createCards(filterDifficulty)
+}
+
 
 
 
@@ -221,6 +236,8 @@ function controll(myData) {
 myEventlister(myData)
 
 }
+
+
 
 
 
